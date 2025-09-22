@@ -26,7 +26,7 @@ public class AppStartupRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            // Step 1: Generate webhook
+
             String generateUrl = "https://bfhldevapigw.healthrx.co.in/hiring/generateWebhook/JAVA";
             Map<String, String> generateRequest = Map.of(
                     "name", name,
@@ -46,14 +46,12 @@ public class AppStartupRunner implements CommandLineRunner {
                 System.err.println("Failed to get webhook URL or access token.");
                 return;
             }
-
-            // Step 2: Decide SQL query
             String finalQuery = getFinalQuery(regNo);
 
-            // Step 3: Submit solution with correct header and payload
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("Authorization", accessToken); // <-- raw token, NO 'Bearer'
+            headers.set("Authorization", accessToken); // yo have to look at this one
 
             Map<String, String> answer = Map.of("finalQuery", finalQuery);
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(answer, headers);
@@ -72,7 +70,7 @@ public class AppStartupRunner implements CommandLineRunner {
             ex.printStackTrace();
         }
     }
-
+ // okay now we deal with SQL query na les goo
     private String getFinalQuery(String regNo) {
         int lastTwoDigits = Integer.parseInt(regNo.substring(regNo.length() - 2));
         if (lastTwoDigits % 2 == 0) {
